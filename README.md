@@ -2,6 +2,8 @@
 
 クイズで楽しみながら思考力を鍛えられるアプリケーション
 
+<img width="689" alt="screenshot" src="https://github.com/jajimajp/benesse_quiz_app2/assets/119467077/5ab3d8df-39cc-4831-8a2f-cf24af10576f">
+
 ## 技術スタック
 
 - Flutter
