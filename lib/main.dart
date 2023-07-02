@@ -1,3 +1,4 @@
+import 'package:benesse_quiz_app2/ui/difficultyList.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -6,65 +7,48 @@ import 'dart:async';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(GetInfo());
+  runApp(new MaterialApp(
+    home: DifficultyListView(),
+  ));
+  // runApp(GetInfo());
 }
 
 class GetInfo extends StatefulWidget {
   @override
   _GetInfoState createState() => _GetInfoState();
 }
-
 class _GetInfoState extends State<GetInfo> {
+  List values = [];
   String? aUrl;
   int retryAttempts = 0;
   Timer? retryTimer;
-
   @override
   void initState() {
     super.initState();
-    getDataWithRetry();
+    // getDataWithRetry();
+    getData();
   }
-
   @override
   void dispose() {
     retryTimer?.cancel();
     super.dispose();
   }
-
-  void getDataWithRetry() {
-    retryTimer?.cancel();
-    retryTimer = Timer(Duration(seconds: 2 * retryAttempts), () {
-      getData();
-    });
-  }
-
+  
   Future<void> getData() async {
-    final docSnapshot = await FirebaseFirestore.instance
+    final collectionRef = FirebaseFirestore.instance
         .collection('questions')
         .doc('easy')
-        .collection('dataset')
-        .doc('test')
-        .get();
-
-    if (docSnapshot != null && docSnapshot.exists) {
-      final data = docSnapshot.data() as Map<String, dynamic>?;
-      if (data != null && data.containsKey('a_url')) {
-        setState(() {
-          aUrl = data['a_url'];
-        });
-      } else {
-        print('a_url not found');
-      }
-    } else {
-      print('not exist');
+        .collection('dataset');
+    final querySnapshot = await collectionRef.get();
+    final documents = querySnapshot.docs; // ドキュメントのリストを取得
+    for (var doc in documents) {
+      final data = doc.data();
+      values.add(data);
+      // ドキュメントのデータを処理する
     }
-
-    if (aUrl == null) {
-      retryAttempts++;
-      getDataWithRetry();
-    }
+    print(values);
   }
-
+  
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -76,11 +60,10 @@ class _GetInfoState extends State<GetInfo> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Image.network(aUrl ?? 'URLがありません'),
+              Image.network(aUrl ?? 'URLがありません'),
               Text(aUrl ?? 'データを取得中...'),
             ],
           ),
-
         ),
       ),
     );
