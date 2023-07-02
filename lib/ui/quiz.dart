@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:benesse_quiz_app2/ui/result.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -35,24 +36,9 @@ class _QuizAppState extends State<QuizApp> {
     futureQuestionBank = getData();
   }
 
-  AnswerOption parseAnswer(String s) {
-    switch (s) {
-      case "A":
-        return AnswerOption.A;
-      case "B":
-        return AnswerOption.B;
-      case "C":
-        return AnswerOption.C;
-      case "D":
-        return AnswerOption.D;
-      default:
-        throw Exception("invalid answer type");
-    }
-  }
-
   Question parseQuestion(Map<String, dynamic> d) {
     return Question(answerImageURL: d['a_url'],
-    problemImageURL: d['q_url'], correctAnswer: parseAnswer(d['answer']));
+    problemImageURL: d['q_url'], correctAnswer: AnswerOption.values.byName(d['answer']));
   }
 
   List<Question> parseQuestions(List<dynamic> qs) {
@@ -81,7 +67,7 @@ class _QuizAppState extends State<QuizApp> {
         future: futureQuestionBank,
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return const Scaffold(backgroundColor: Colors.blueGrey);
+            return const Scaffold(backgroundColor: Colors.yellow);
           }
           if (snapshot.hasError) {
             throw Exception('データ取得に失敗しました');
@@ -90,54 +76,191 @@ class _QuizAppState extends State<QuizApp> {
           final problemImageURL =
               questionBank[_currentQuestionIndex].problemImageURL;
           return Scaffold(
-            appBar: AppBar(
-              title: Text("${_currentQuestionIndex + 1}問目"),
-              centerTitle: true,
-              backgroundColor: Colors.blueGrey,
-            ),
-            backgroundColor: Colors.blueGrey,
+            // appBar: AppBar(
+            //   title: Text("${_currentQuestionIndex + 1}問目"),
+            //   centerTitle: true,
+            //   backgroundColor: Colors.blueGrey,
+            // ),
+            backgroundColor: Colors.yellow,
             body: Builder(
               builder: (BuildContext context) => Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Center(
-                    child: quizImage(problemImageURL),
-                  ),
-                  Spacer(),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      ElevatedButton(
-                          onPressed: () =>
-                              _checkAnswer(AnswerOption.A, context),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blueGrey.shade900,
+                      Container(
+                        margin: EdgeInsets.only(
+                          top: 30,
+                          left: 20,
+                        ),
+                        width: 250,
+                        height: 60,
+                        decoration: BoxDecoration(
+                          color: Colors.deepPurpleAccent,
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                        child: Center(
+                          child: Text(
+                            "QUESTION",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 24),
                           ),
-                          child: const Text("A")),
-                      ElevatedButton(
-                        onPressed: () => _checkAnswer(AnswerOption.B, context),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blueGrey.shade900,
                         ),
-                        child: const Text("B"),
                       ),
-                      ElevatedButton(
-                        onPressed: () => _checkAnswer(AnswerOption.C, context),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blueGrey.shade900,
+                      Container(
+                        margin: EdgeInsets.only(
+                          top: 30,
+                          right: 30,
+                          bottom: 10,
                         ),
-                        child: const Text("C"),
-                      ),
-                      ElevatedButton(
-                        onPressed: () => _checkAnswer(AnswerOption.D, context),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blueGrey.shade900,
+                        width: 70,
+                        height: 70,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: Colors.deepPurpleAccent,
+                            width: 10,
+                          ),
                         ),
-                        child: const Text("D"),
+                        child: Center(
+                          child: Text(
+                            "${_currentQuestionIndex + 1}",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                            ),
+                          ),
+                        ),
                       ),
                     ],
                   ),
-                  Spacer(),
+                  Center(
+                    child: quizImage(problemImageURL),
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            margin: EdgeInsets.only(top: 20),
+                            alignment: Alignment.bottomRight,
+                            width: MediaQuery.of(context).size.width * 2 / 5,
+                            height: 95,
+                            child: ElevatedButton(
+                              onPressed: () =>
+                                  _checkAnswer(AnswerOption.A, context),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.blueGrey.shade900,
+                                minimumSize: Size(80, 80),
+                                shape: const CircleBorder(
+                                  side: BorderSide(
+                                    width: 1,
+                                    style: BorderStyle.solid,
+                                  ),
+                                ),
+                              ),
+                              child: const Text(
+                                "A",
+                                style: TextStyle(
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            alignment: Alignment.topLeft,
+                            width: MediaQuery.of(context).size.width * 2 / 5,
+                            height: 100,
+                            child: ElevatedButton(
+                              onPressed: () =>
+                                  _checkAnswer(AnswerOption.B, context),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.blueGrey.shade900,
+                                minimumSize: Size(80, 80),
+                                shape: const CircleBorder(
+                                  side: BorderSide(
+                                    width: 1,
+                                    style: BorderStyle.solid,
+                                  ),
+                                ),
+                              ),
+                              child: const Text(
+                                "B",
+                                style: TextStyle(
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            alignment: Alignment.bottomRight,
+                            width: MediaQuery.of(context).size.width * 2 / 5,
+                            height: 85,
+                            child: ElevatedButton(
+                              onPressed: () =>
+                                  _checkAnswer(AnswerOption.C, context),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.blueGrey.shade900,
+                                minimumSize: Size(80, 80),
+                                shape: const CircleBorder(
+                                  side: BorderSide(
+                                    width: 1,
+                                    style: BorderStyle.solid,
+                                  ),
+                                ),
+                              ),
+                              child: const Text(
+                                "C",
+                                style: TextStyle(
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            alignment: Alignment.topLeft,
+                            width: MediaQuery.of(context).size.width * 2 / 5,
+                            height: 115,
+                            child: ElevatedButton(
+                              onPressed: () =>
+                                  _checkAnswer(AnswerOption.D, context),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.blueGrey.shade900,
+                                minimumSize: Size(80, 80),
+                                shape: const CircleBorder(
+                                  side: BorderSide(
+                                    width: 1,
+                                    style: BorderStyle.solid,
+                                  ),
+                                ),
+                              ),
+                              child: const Text(
+                                "D",
+                                style: TextStyle(
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -161,6 +284,12 @@ class _QuizAppState extends State<QuizApp> {
     ///現在の得点
     debugPrint("Score(now)=$_score");
     await _dialogBuilder(context, userChoice);
+    if (_questioncount == questionBank.length) {
+      Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => Quizresult(widget.difficulty, _score),
+        )
+      );
+    }
     _nextQuestion();
   }
 
@@ -172,10 +301,17 @@ class _QuizAppState extends State<QuizApp> {
         userChoice == questionBank[_currentQuestionIndex].correctAnswer;
     final answerImageURL = questionBank[_currentQuestionIndex].answerImageURL;
     return showDialog<void>(
+        barrierDismissible: false,
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: isCorrect ? const Text("正解") : const Text("不正解"),
+            title: isCorrect
+                ? Image(
+              image: AssetImage("images/IMG_0587.PNG"),
+            )
+                : Image(
+              image: AssetImage("images/IMG_0590.PNG"),
+            ),
             content: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -183,16 +319,18 @@ class _QuizAppState extends State<QuizApp> {
                   child: quizImage(answerImageURL),
                 ),
                 const Spacer(),
-                TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: const Text("次の問題へ")),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Image(
+                    image: AssetImage("images/IMG_0588.PNG"),
+                  ),
+                ),
               ],
             ),
           );
         });
-
   }
 
   _updateQuestion() async {
@@ -208,9 +346,14 @@ class _QuizAppState extends State<QuizApp> {
 
   Widget quizImage(String imageUrl) {
     return Container(
-      width: 400,
-      height: 300,
+      width: 320,
+      height: 320,
       decoration: BoxDecoration(
+        border: Border.all(
+          color: Colors.grey,
+          width: 5,
+        ),
+        borderRadius: BorderRadius.circular(10),
         // shape: BoxShape.circle,
         image: DecorationImage(
           image: NetworkImage(imageUrl),

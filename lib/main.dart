@@ -33,7 +33,7 @@ class _GetInfoState extends State<GetInfo> {
     retryTimer?.cancel();
     super.dispose();
   }
-
+  
   Future<void> getData() async {
     final collectionRef = FirebaseFirestore.instance
         .collection('questions')
@@ -48,7 +48,7 @@ class _GetInfoState extends State<GetInfo> {
     }
     print(values);
   }
-
+  
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
