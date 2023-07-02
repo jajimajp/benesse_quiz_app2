@@ -1,16 +1,27 @@
-# benesse_quiz_app2
+# AOI (Ability Of Imagination)
 
-A new Flutter project.
+クイズで楽しみながら思考力を鍛えられるアプリケーション
 
-## Getting Started
+## 技術スタック
 
-This project is a starting point for a Flutter application.
+- Flutter
+- Firebase
 
-A few resources to get you started if this is your first Flutter project:
+## 環境構築
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+このリポジトリをクローンします。
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```bash
+git clone https://github.com/jajimajp/benesse_quiz_app2.git
+```
+
+プロジェクトのディレクトリに移動後、アプリの実行に必要な依存環境のインストールを行います。
+
+```bash
+flutter pub get
+```
+
+デバッグモードで実行します。
+```bash
+ flutter run --debug
+ ```
