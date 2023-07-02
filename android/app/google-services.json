@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "7610252646",
+    "project_id": "benessequizapp-c2ce7",
+    "storage_bucket": "benessequizapp-c2ce7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:7610252646:android:38317598fd6aff57385ca7",
+        "android_client_info": {
+          "package_name": "benesse.quiz_flutter_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "7610252646-ubmj9cm0buu991udc2pk6ibhvtsgae2c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAIAikOB7CgRN2vp3YVhgynNRJGHIph5lM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "7610252646-ubmj9cm0buu991udc2pk6ibhvtsgae2c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
